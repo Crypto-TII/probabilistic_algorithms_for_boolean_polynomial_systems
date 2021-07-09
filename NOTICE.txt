@@ -33,7 +33,8 @@ This code is as a companion to the article:
 
 * Stefano Barbero, Emanuele Bellini, Carlo Sanna, and Javier Verbel, 
   Practical complexities of probabilistic algorithms for solving 
-  Boolean polynomial systems
+  Boolean polynomial systems, Cryptology ePrint Archive, 
+  Report 2021/913, 2021, https://eprint.iacr.org/2021/913
 
 and is an implementation of the probabilistic algorithms for solving 
 Boolean polynomial systems described in the following papers:
