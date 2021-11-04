@@ -1,0 +1,67 @@
+
+========================================================================
+
+Copyright 2021 Carlo Sanna (1), Javier Verbel (2)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Contacts:
+
+(1) Department of Mathematical Sciences
+    Politecnico di Torino
+    Torino, IT
+    carlo.sanna.dev@gmail.com
+
+(2) Cryptography Research Centre
+    Technology Innovation Institute
+    Abu Dhabi, UAE
+    javier.verbel@tii.ae
+
+========================================================================
+
+This code is as a companion to the article:
+
+* Stefano Barbero, Emanuele Bellini, Carlo Sanna, and Javier Verbel, 
+  Practical complexities of probabilistic algorithms for solving 
+  Boolean polynomial systems, Cryptology ePrint Archive, 
+  Report 2021/913, 2021, https://eprint.iacr.org/2021/913
+
+and is an implementation of the probabilistic algorithms for solving 
+Boolean polynomial systems described in the following papers:
+
+* D. Lokshtanov, R. Paturi, S. Tamaki, R. Williams, and H. Yu., 
+  Beating brute force for systems of polynomial equations over finite 
+  fields., 
+  Proceedings of the Twenty-Eighth Annual ACM-SIAM Symposium on 
+  Discrete Algorithms, 2017, pp. 2190–2202. 
+
+* A. Björklund, P. Kaski, and R. Williams, 
+  Solving systems of polynomial equations over GF(2) by a 
+  parity-counting self-reduction, 
+  ICALP 2019, Leibniz International Proceedings in Informatics (LIPIcs), 
+  2019, pp. 26:1–26:13.
+
+* I. Dinur, 
+  Improved algorithms for solving polynomial systems over GF(2) by 
+  multiple parity-counting, 
+  Proceedings of the Thirty-Second Annual ACM-SIAM Symposium on 
+  Discrete Algorithms, 2021, pp. 2550–2564.
+
+* I. Dinur, 
+  Cryptanalytic applications of the polynomial method for solving 
+  multivariate equation systems over GF(2), 
+  EUROCRYPT 2021 available at https://eprint.iacr.org/2021/578.pdf, 
+  2021.
+
+
+
