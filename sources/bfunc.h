@@ -31,7 +31,7 @@ bool bfunc_get(bfunc_t *bfunc, bvar_t x);
 /* Set the value or monomial coefficient of the Boolean function at 'x'. */
 void bfunc_set(bfunc_t *bfunc, bvar_t x, bool y);
 
-/* Set 'y' to the value or monomial coefficient of the Boolean function at 'x'. */
+/* Add 'y' to the value or monomial coefficient of the Boolean function at 'x'. */
 void bfunc_add(bfunc_t *bfunc, bvar_t x, bool y);
 
 /* Print the values or monomial coefficients of the Boolean function.

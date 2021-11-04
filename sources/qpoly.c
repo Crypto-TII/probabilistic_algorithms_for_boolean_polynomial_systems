@@ -4,23 +4,7 @@
 #include <string.h>
 #include "rand.h"
 #include "qpoly.h"
-#include "bpoly.h"
 #include "bvar.h"
-
-
-/* Structure for a quadratic (Boolean) polynomial
- * 
- * Q(x) = sum_{1 <= i <= j < n} a_{i,j} x_i x_j + b,  a_{i,j}, b in F_2
- * 
- * in the variables x_1, ..., x_n (note that x_i^2 = x_i).
- */
-struct qpoly_s
-{
-    int     n; /* Number of variables. */
-    bvar_t *a; /* (a[i] << j) & 1 is equal to a_{i,j}, if i <= j, 
-                                       and to       0, otherwise. */
-    bool    b; /* Constant term. */
-};
 
 qpoly_t *qpoly_new_zero(int n)
 {
@@ -183,15 +167,12 @@ void qpoly_subs(qpoly_t *qpoly, bvar_t z, int k)
     qpoly->n = n - k;
 }
 
-bpoly_t *qpoly_to_bpoly(qpoly_t *qpoly)
+bfunc_t *qpoly_to_bfunc(qpoly_t *qpoly)
 {
-    bpoly_t *bpoly = bpoly_new_zero();
+    bfunc_t *bfunc;
     
-    if (qpoly->b)
-    {
-        bpoly_add_mon(bpoly, 0);
-    }
-    
+    bfunc = bfunc_new(qpoly->n);
+
     int i, j;
     for (i = 0; i < qpoly->n; i++)
     {
@@ -199,21 +180,20 @@ bpoly_t *qpoly_to_bpoly(qpoly_t *qpoly)
         {
             if ((qpoly->a[i] >> j) & 1)
             {
-                bvar_t x = ((bvar_t)1 << i) | ((bvar_t)1 << j);
+                bvar_t mon;
                 
-                bpoly_add_mon(bpoly, x);
+                mon = ((bvar_t)1 << i) | ((bvar_t)1 << j);
+                
+                bfunc_set(bfunc, mon, 1);
             }
         }
     }
-
-    return bpoly;
-}
-
-bfunc_t *qpoly_to_bfunc(qpoly_t *qpoly)
-{
-    bpoly_t *bpoly = qpoly_to_bpoly(qpoly);
-    bfunc_t *bfunc = bpoly_monomials(bpoly, qpoly->n);
-    bpoly_free(bpoly);
+    
+    if (qpoly->b)
+    {
+        bfunc_set(bfunc, 0, 1);
+    }
+    
     return bfunc;
 }
 

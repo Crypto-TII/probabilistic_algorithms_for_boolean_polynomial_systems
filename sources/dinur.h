@@ -10,6 +10,7 @@
 #ifndef DINUR_H
 #define DINUR_H
 
+#include "bfunc.h"
 #include "qsyst.h"
 
 /* Return the parity of the number of solutions of 'qsyst'. */

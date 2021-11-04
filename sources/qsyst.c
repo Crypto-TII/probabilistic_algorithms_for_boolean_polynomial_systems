@@ -148,25 +148,6 @@ qsyst_t *qsyst_rand_lin_comb(qsyst_t* qsyst, int r)
     return rlc;
 }
 
-bpoly_t *qsyst_characteristic(qsyst_t *qsyst)
-{
-    bpoly_t *bpoly = bpoly_new((bvar_t[]){0}, 1);
-    
-    int i;
-    for (i = 0; i < qsyst->m; i++)
-    {
-        bpoly_t *fact = qpoly_to_bpoly(qsyst->qpoly[i]);
-        
-        bpoly_add_mon(fact, 0);
-        
-        bpoly_mul(bpoly, fact);
-        
-        bpoly_free(fact);
-    }
-    
-    return bpoly;
-}
-
 qsyst_t *qsyst_join_linear_polynomials(qsyst_t *qsyst, int r)
 {
     qsyst_t *qsyst_output;

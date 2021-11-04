@@ -2,6 +2,7 @@
 #define RBFUNC_H
 
 #include "bfunc.h"
+#include "qsyst.h"
 
 /* Restricted Boolean function type.
  * (Boolean function whose argument has bounded Hamming weight.)
@@ -23,6 +24,11 @@ typedef struct rbfunc_s rbfunc_t;
 /* Create a new restricted Boolean function of 'n' variables and bounded weight 'w'. */
 rbfunc_t *rbfunc_new(int n, int w);
 
+/* Create a new restricted Boolean function representing the polynomial 
+ * F = prod_{i=1}^m (p_i + 1), where p_1,...,p_m are the equations of 'qsyst'.
+ * This polynomial has the property that F(x) = 1 if and only if 'x' is a solution of 'qsyst'. */
+rbfunc_t *rbfunc_new_characteristic(qsyst_t *qsyst);
+
 /* Destroy 'rbfunc'. */
 void rbfunc_free(rbfunc_t *rbfunc);
 
@@ -34,6 +40,9 @@ void rbfunc_set(rbfunc_t *rbfunc, bvar_t x, bool y);
 
 /* Return a copy of 'rbfunc'. */
 rbfunc_t *rbfunc_copy(rbfunc_t *rbfunc);
+
+/* Replace 'rbfunc1' with 'rbfunc1 + rbfunc2'. */
+void rbfunc_add(rbfunc_t *rbfunc1, rbfunc_t *rbfunc2);
 
 /* Print the values or monomial coefficients of the restricted boolean function.
  * (For testing/debugging.) */

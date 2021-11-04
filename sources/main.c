@@ -1,3 +1,4 @@
+
 #include "rand.h"
 #include "tests/test_lokshtanov.h"
 #include "tests/test_bjorklund.h"
@@ -8,15 +9,15 @@
 int main(int argc, char *argv[])
 {
     rand_init(1234321);
-
+    
     test_lokshtanov();
-
+    
     test_bjorklund();
-
+    
     test_dinur();
-
+    
     test_dinur2();
-
+    
     test_polynomial_solver();
 
     return 0;

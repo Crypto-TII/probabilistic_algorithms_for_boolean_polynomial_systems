@@ -22,11 +22,76 @@ rbfunc_t *rbfunc_new(int n, int w)
 
     rbfunc = malloc(sizeof(rbfunc_t));
     rbfunc->n = n;
-    rbfunc->w = w;
+    rbfunc->w = (w < n) ? w : n;
     rbfunc->nvalues = bvar_number_of_values(n, rbfunc->w);
     rbfunc->data = calloc(rbfunc->nvalues / rbchunk_size + 1, sizeof(rbchunk));
 
     return rbfunc;
+}
+
+/* Replace 'rbfunc1' with 'rbfunc1 + bfunc2 * mon' */
+void rbfunc_mul_add(rbfunc_t *rbfunc1, rbfunc_t *rbfunc2, bvar_t mon)
+{
+    bvar_t x = 0; int h = 0;
+    do
+    {
+        rbfunc_xor(rbfunc1, x | mon, rbfunc_get(rbfunc2, x));
+    }
+    while (next_subset(&x, &h, rbfunc2->n, rbfunc2->w));
+}
+
+/* Replace 'rbfunc1' with 'rbfunc2 * (qpoly + 1)' */
+void rbfunc_mul_qpoly(rbfunc_t *rbfunc1, rbfunc_t *rbfunc2, qpoly_t *qpoly)
+{
+    int i, j;
+    for (i = 0; i < qpoly->n; i++)
+    {
+        for (j = i; j < qpoly->n; j++)
+        {
+            if (qpoly->a[i] & (1 << j))
+            {
+                bvar_t mon;
+                
+                mon = ((bvar_t)1 << i) | ((bvar_t)1 << j);
+
+                rbfunc_mul_add(rbfunc1, rbfunc2, mon);
+            }
+        }
+    }
+    
+    if (!qpoly->b)
+    {
+        rbfunc_mul_add(rbfunc1, rbfunc2, 0);
+    }
+}
+
+rbfunc_t *rbfunc_new_characteristic(qsyst_t *qsyst)
+{
+    int n, m, w;
+    rbfunc_t *rbfunc2;
+    
+    n = qsyst_num_vars(qsyst);
+    m = qsyst_num_eqs(qsyst);
+    w = (2*m < n) ? (2*m) : n;
+
+    rbfunc2 = rbfunc_new(n, w);
+    rbfunc_set(rbfunc2, 0, 1);
+    
+    int i;
+    for (i = 0; i < m; i++)
+    {
+        rbfunc_t *rbfunc1, *rbfunc3;
+        
+        rbfunc1 = rbfunc_new(n, w);
+        
+        rbfunc_mul_qpoly(rbfunc1, rbfunc2, qsyst_equ(qsyst, i));
+        
+        rbfunc3 = rbfunc2;
+        rbfunc2 = rbfunc1;
+        rbfunc_free(rbfunc3);
+    }
+    
+    return rbfunc2;
 }
 
 void rbfunc_free(rbfunc_t *rbfunc)
@@ -80,6 +145,15 @@ rbfunc_t *rbfunc_copy(rbfunc_t *rbfunc)
     while (next_subset(&x, &h, rbfunc->n, rbfunc ->w));
     
     return copy;
+}
+
+void rbfunc_add(rbfunc_t *rbfunc1, rbfunc_t *rbfunc2)
+{
+    bvar_t i;
+    for (i = 0; i < rbfunc1->nvalues / rbchunk_size + 1; i++)
+    {
+        rbfunc1->data[i] ^= rbfunc2->data[i];
+    }
 }
 
 void rbfunc_print(rbfunc_t *rbfunc)

@@ -4,7 +4,7 @@
 #include <math.h>
 #include "rand.h"
 #include "bfunc.h"
-#include "bpoly.h"
+#include "rbfunc.h"
 #include "lokshtanov.h"
 
 bool lokshtanov_consistency(qsyst_t *qsyst, double delta, int number_of_iterations){
@@ -27,10 +27,12 @@ bool lokshtanov_consistency(qsyst_t *qsyst, double delta, int number_of_iteratio
     
     int *score = calloc(1 << (n - n1), sizeof(int));
     
+    int w = (2*(n1 + 2) < n - n1) ? (2*(n1 + 2)) : (n - n1);
+    
     int i;
     for (i = 0; i < s; i++) 
     {    
-        bpoly_t *R = bpoly_new_zero();
+        rbfunc_t *R = rbfunc_new(n - n1, w);
         
         bvar_t z;
         for (z = 0; z < ((bvar_t)1 << n1); z++) 
@@ -38,27 +40,27 @@ bool lokshtanov_consistency(qsyst_t *qsyst, double delta, int number_of_iteratio
             if (rand_bool()) 
             {
                 qsyst_t *subs, *rlc;
-                bpoly_t *F;
+                rbfunc_t *F;
                 
                 subs = qsyst_copy(qsyst);
                 qsyst_subs(subs, z, n1);
 
                 rlc = qsyst_rand_lin_comb(subs, n1 + 2);
-                F = qsyst_characteristic(rlc);
-                
-                bpoly_add(R, F);
+                F = rbfunc_new_characteristic(rlc);
+
+                rbfunc_add(R, F);
                 
                 qsyst_free(subs);
                 qsyst_free(rlc);
-                bpoly_free(F);
+                rbfunc_free(F);
             }
         }
         
         bfunc_t *bfunc;
         
-        bfunc = bpoly_truth_table(R, n - n1);
-        
-        bpoly_free(R);
+        bfunc = rbfunc_to_bfunc(R);
+        rbfunc_free(R);
+        bfunc_zeta_transform(bfunc);
         
         bvar_t x;
         for (x = 0; x < ((bvar_t)1 << (n - n1)); x++) 

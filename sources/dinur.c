@@ -117,16 +117,15 @@ bfunc_t *dinur_bruteforce_multiparity(qsyst_t * qsyst, int n1, int w)
     int j;
     for (j = 0; j < m; j++)
     {
-        bpoly_t *bpoly = qpoly_to_bpoly(qsyst_equ(qsyst, j));
-        bpoly_add_mon(bpoly, 0);
+        bfunc_t *bfunc;
         
-        bfunc_t *bfunc = bpoly_monomials(bpoly, n);
+        bfunc = qpoly_to_bfunc(qsyst_equ(qsyst, j));
+        bfunc_add(bfunc, 0, 1);
         
         bfunc_partially_restricted_zeta_transform(bfunc, n1, w);
         
         bfunc_and(evals, bfunc);
         
-        bpoly_free(bpoly);
         bfunc_free(bfunc);
     }
     

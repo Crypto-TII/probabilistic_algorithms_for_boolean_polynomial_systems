@@ -1,11 +1,25 @@
 #ifndef QPOLY_H
 #define QPOLY_H
 
+#include "bfunc.h"
 #include "bvar.h"
-#include "bpoly.h"
 
 /* Type for a quadratic (Boolean) polynomial. */
 typedef struct qpoly_s qpoly_t;
+
+/* Structure for a quadratic (Boolean) polynomial
+ * 
+ * Q(x) = sum_{1 <= i <= j < n} a_{i,j} x_i x_j + b,  a_{i,j}, b in F_2
+ * 
+ * in the variables x_1, ..., x_n (note that x_i^2 = x_i).
+ */
+struct qpoly_s
+{
+    int     n; /* Number of variables. */
+    bvar_t *a; /* (a[i] << j) & 1 is equal to a_{i,j}, if i <= j, 
+                                       and to       0, otherwise. */
+    bool    b; /* Constant term. */
+};
 
 /* Create a zero quadratic polynomial in 'n' variables. */
 qpoly_t *qpoly_new_zero(int n);
@@ -34,9 +48,6 @@ void qpoly_add(qpoly_t *qpoly1, qpoly_t *qpoly2);
 
 /* In 'qpoly' substitute the last 'k' variables with 'z'. */
 void qpoly_subs(qpoly_t *qpoly, bvar_t z, int k);
-
-/* Return a copy of 'qpoly' as a 'bpoly_t' polynomial of 'n' variables. */
-bpoly_t *qpoly_to_bpoly(qpoly_t *qpoly);
 
 /* Return a copy of 'qpoly' as a 'bfunc_t' polynomial of 'n' variables. */
 bfunc_t *qpoly_to_bfunc(qpoly_t *qpoly);

@@ -1,6 +1,8 @@
 #include "test_rbfunc.h"
 #include "rbfunc.h"
+#include "qsyst.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void test_rbfunc()
 {
@@ -84,5 +86,39 @@ void test_rbfunc()
     else
     {
         printf("SOME TEST FAILED!\n");
+    }
+}
+
+void test_rbfunc_new_characteristic()
+{
+    int m; int n;
+    
+    for (n = 10; n < 15; n++)
+    {
+        for (m = n - 2; m < n + 3; m++)
+        {
+            printf("m = %d, n = %d\n", m, n);
+            
+            qsyst_t *qsyst;
+            rbfunc_t *rbfunc;
+            
+            qsyst = qsyst_new_random(m, n);
+            
+            rbfunc = rbfunc_new_characteristic(qsyst);
+            rbfunc_zeta_transform(rbfunc);
+        
+            bvar_t x;
+            for (x = 0; x < ((bvar_t)1 << n); x++)
+            {
+                if (qsyst_is_solution(qsyst, x) != rbfunc_get(rbfunc, x))
+                {
+                    printf("Error!\n");
+                    exit(0);
+                }
+            }
+            
+            rbfunc_free(rbfunc);
+            qsyst_free(qsyst);
+        }
     }
 }

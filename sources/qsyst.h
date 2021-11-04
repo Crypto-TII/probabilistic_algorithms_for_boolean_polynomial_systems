@@ -2,7 +2,6 @@
 #define QSYST_H
 
 #include "bvar.h"
-#include "bpoly.h"
 #include "qpoly.h"
 
 /* Type for a system of quadratic polynomials. */
@@ -41,10 +40,6 @@ void qsyst_subs(qsyst_t *qsyst, bvar_t z, int k);
 /* Create a system of 'r' random linear combinations of the
  * equations of 'qsyst' */
 qsyst_t *qsyst_rand_lin_comb(qsyst_t* qsyst, int r);
-
-/* Return the Boolean polynomial F = prod_{i=1}^m (p_i + 1), where p_1,...,p_m are the equations of 'qsyst'.
- * This polynomial has the property that F(x) = 1 if and only if 'x' is a solution of 'qsyst'. */
-bpoly_t *qsyst_characteristic(qsyst_t *qsyst);
 
 /* Return a new system equal to the join of 'qsyst' and 'r' random linear polynomials. */
 qsyst_t *qsyst_join_linear_polynomials(qsyst_t *qsyst, int r);
